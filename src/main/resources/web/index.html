@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Reserva de salas · Herramientas y agentes</title>
+    <link rel="stylesheet" href="/app.css" />
+    <script src="/app.js" defer></script>
+  </head>
+  <body>
+    <header>
+      <div>
+        <span class="eyebrow">EJEMPLO JAVA</span>
+        <h1>Reserva de salas</h1>
+        <p>Una petición, dos herramientas y una confirmación real.</p>
+      </div>
+      <button id="logout" class="secondary" hidden>Cerrar sesión</button>
+    </header>
+    <main>
+      <p id="mode" class="notice"></p>
+      <section id="login-panel">
+        <h2>Acceso a la demostración</h2>
+        <p>
+          Introduce la contraseña que has configurado en
+          <code>DEMO_PASSWORD</code>. El servidor asigna la cuenta de
+          demostración a esta sesión.
+        </p>
+        <form id="login">
+          <label
+            >Contraseña<input
+              id="password"
+              type="password"
+              autocomplete="current-password"
+              required /></label
+          ><button>Entrar</button>
+        </form>
+      </section>
+      <section id="request-panel" hidden>
+        <h2>1. Prepara la petición</h2>
+        <p>
+          La franja y los asistentes se validan en el servidor. El texto aporta
+          las preferencias. El catálogo inicial contiene Norte (8 plazas y
+          proyector) y Sur (4 plazas).
+        </p>
+        <form id="booking">
+          <div class="fields">
+            <label
+              >Inicio<input id="starts" type="datetime-local" required /></label
+            ><label>Fin<input id="ends" type="datetime-local" required /></label
+            ><label
+              >Asistentes<input
+                id="attendees"
+                type="number"
+                min="1"
+                max="100"
+                value="6"
+                required
+            /></label>
+          </div>
+          <label
+            >Mensaje<textarea id="message" maxlength="2000" rows="3" required>
+Busca una sala con proyector y resérvala.</textarea
+            >
+          </label>
+          <label class="check"
+            ><input id="allow" type="checkbox" checked />Permitir crear una
+            reserva para esta petición</label
+          >
+          <div class="actions">
+            <button id="submit">Ejecutar turno</button
+            ><button id="retry" type="button" class="secondary" disabled>
+              Repetir la misma petición
+            </button>
+          </div>
+        </form>
+      </section>
+      <p id="feedback" role="status" aria-live="polite"></p>
+      <section id="result" hidden>
+        <h2>2. Resultado de la aplicación</h2>
+        <p id="outcome"></p>
+        <pre id="reservation" hidden></pre>
+        <p id="counts" class="muted"></p>
+      </section>
+      <section id="trace-panel" hidden>
+        <h2>3. Sigue los intercambios</h2>
+        <p>
+          Cada bloque indica una llamada al modelo, una herramienta solicitada o
+          el resultado obtenido por la aplicación.
+        </p>
+        <ol id="trace"></ol>
+      </section>
+    </main>
+    <footer>
+      Ejemplo del artículo
+      <a
+        href="https://adriangm.dev/categoria/inteligencia-artificial/integracion-ia-software/herramientas-y-agentes-coordinar-un-turno"
+        >Herramientas y agentes: cómo una aplicación coordina un turno</a
+      >.
+    </footer>
+  </body>
+</html>
