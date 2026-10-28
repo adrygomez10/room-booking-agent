@@ -3,6 +3,16 @@ on: [push, pull_request]
 permissions:
   contents: read
 jobs:
+  code-style:
+    name: Code style
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - name: Check Java style with Spotless and Checkstyle
+        run: docker compose -f compose.style.yaml run --rm --no-deps check
   verify:
     runs-on: ubuntu-latest
     steps:

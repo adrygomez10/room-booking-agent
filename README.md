@@ -35,7 +35,7 @@ DEMO_PASSWORD=local-example-password java -jar target/room-booking-agent-1.0.0.j
 
 En PowerShell, define antes `$env:DEMO_PASSWORD='local-example-password'` y ejecuta `java -jar target/room-booking-agent-1.0.0.jar`. Esta forma usa `127.0.0.1:8080` y guarda la base en `data/`, excluida de Git. El programa lee variables de entorno; `.env` lo carga Docker Compose, no el JAR.
 
-`mvn verify` ejecuta pruebas de dominio, concurrencia, persistencia, herramientas, HTTP y contrato del proveedor, además de ArchUnit, el formato y Checkstyle con las reglas Google para fuentes y pruebas. `mvn spotless:apply` aplica el formato Java.
+`mvn verify` ejecuta pruebas de dominio, concurrencia, persistencia, herramientas, HTTP y contrato del proveedor, además de ArchUnit, el formato y Checkstyle con el perfil Clean Code - Project Style para fuentes y pruebas. `mvn spotless:apply` aplica el formato Java.
 
 ## Qué contiene cada fichero
 
@@ -84,3 +84,14 @@ La reserva solo puede solicitar una sala ofrecida en la búsqueda del turno y vu
 H2 conserva salas y reservas. Una fila de bloqueo serializa las escrituras para impedir reservas solapadas y repeticiones concurrentes; es una solución deliberadamente sencilla, con menor concurrencia que un diseño de producción. Las sesiones y las últimas veinte peticiones viven en memoria durante una hora: tras reiniciar hay que iniciar sesión y las solicitudes anteriores dejan de estar disponibles por HTTP, aunque las reservas sigan guardadas.
 
 La interfaz usa un diseño administrativo básico, fuentes del sistema y colores neutros con azul para las acciones. Esta demo local tiene una sola cuenta; no implementa gestión de usuarios, un despliegue público ni MCP. El modo real necesita conectividad y una cuenta de Google AI y puede generar consumo en ese proveedor.
+
+## Estilo de código compartido
+
+El proyecto utiliza [Clean Code - Project Style 1.0](docs/code-style.md): cuatro espacios, 120 columnas y llaves de métodos y constructores en la línea siguiente. Spotless y Checkstyle comprueban las mismas reglas desde Maven, el precommit y el check independiente `Code style` de las pull requests.
+
+```sh
+docker compose -f compose.style.yaml run --rm --no-deps check
+docker compose -f compose.style.yaml run --rm --no-deps format
+```
+
+La guía documenta la instalación del precommit en cada clon y los límites de la comprobación automática.

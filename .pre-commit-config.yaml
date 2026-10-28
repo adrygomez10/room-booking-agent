@@ -1,0 +1,14 @@
+minimum_pre_commit_version: '4.7.0'
+default_install_hook_types: [pre-commit]
+
+repos:
+  - repo: local
+    hooks:
+      - id: clean-code-style
+        name: Clean Code - Project Style (Maven)
+        language: system
+        entry: docker compose -f compose.style.yaml run --rm --no-deps check
+        pass_filenames: false
+        require_serial: true
+        stages: [pre-commit, manual]
+        files: '(\.java$|(^|/)pom\.xml$|^config/(checkstyle-clean-code|eclipse-formatter)\.xml$|^compose\.style\.yaml$|^\.pre-commit-config\.yaml$|^\.editorconfig$|^\.gitattributes$|^requirements-style\.txt$)'
