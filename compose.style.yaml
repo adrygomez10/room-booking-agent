@@ -1,0 +1,20 @@
+name: room-booking-agent-style
+
+x-style: &style
+  image: maven:3.9.12-eclipse-temurin-25@sha256:4f82a03a7d6679281952d628131299b1be88d7030a49c6a2b7d2ba2642e44e3e
+  working_dir: /workspace
+  entrypoint: [mvn, -B, -ntp]
+  volumes:
+    - .:/workspace
+    - maven-cache:/root/.m2
+
+services:
+  check:
+    <<: *style
+    command: [validate]
+  format:
+    <<: *style
+    command: ['spotless:apply']
+
+volumes:
+  maven-cache:

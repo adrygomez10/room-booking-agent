@@ -1,4 +1,4 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>dev.adriangm</groupId>
@@ -7,6 +7,10 @@
   <properties>
     <maven.compiler.release>17</maven.compiler.release>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <spotless.version>3.10.4</spotless.version>
+    <eclipse-jdt.version>4.39</eclipse-jdt.version>
+    <checkstyle-plugin.version>3.6.0</checkstyle-plugin.version>
+    <checkstyle.version>14.3.0</checkstyle.version>
   </properties>
   <dependencies>
     <dependency>
@@ -56,10 +60,10 @@
         <version>3.6.1</version>
         <executions>
           <execution>
-            <phase>package</phase>
             <goals>
               <goal>shade</goal>
             </goals>
+            <phase>package</phase>
             <configuration>
               <createDependencyReducedPom>false</createDependencyReducedPom>
               <transformers>
@@ -87,47 +91,61 @@
       <plugin>
         <groupId>com.diffplug.spotless</groupId>
         <artifactId>spotless-maven-plugin</artifactId>
-        <version>3.10.4</version>
+        <version>${spotless.version}</version>
         <configuration>
+          <lineEndings>UNIX</lineEndings>
+          <upToDateChecking>
+            <enabled>false</enabled>
+          </upToDateChecking>
           <java>
-            <googleJavaFormat>
-              <version>1.36.1</version>
-            </googleJavaFormat>
+            <eclipse>
+              <version>${eclipse-jdt.version}</version>
+              <file>${maven.multiModuleProjectDirectory}/config/eclipse-formatter.xml</file>
+            </eclipse>
             <removeUnusedImports/>
+            <forbidWildcardImports/>
+            <trimTrailingWhitespace/>
+            <endWithNewline/>
           </java>
+          <pom>
+            <sortPom/>
+          </pom>
         </configuration>
         <executions>
           <execution>
-            <phase>verify</phase>
+            <id>formatting</id>
             <goals>
               <goal>check</goal>
             </goals>
+            <phase>validate</phase>
           </execution>
         </executions>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>3.6.0</version>
+        <version>${checkstyle-plugin.version}</version>
+        <configuration>
+          <configLocation>${maven.multiModuleProjectDirectory}/config/checkstyle-clean-code.xml</configLocation>
+          <includeTestSourceDirectory>true</includeTestSourceDirectory>
+          <consoleOutput>true</consoleOutput>
+          <failOnViolation>true</failOnViolation>
+          <linkXRef>false</linkXRef>
+        </configuration>
         <dependencies>
           <dependency>
             <groupId>com.puppycrawl.tools</groupId>
             <artifactId>checkstyle</artifactId>
-            <version>14.3.0</version>
+            <version>${checkstyle.version}</version>
           </dependency>
         </dependencies>
-        <configuration>
-          <configLocation>google_checks.xml</configLocation>
-          <includeTestSourceDirectory>true</includeTestSourceDirectory>
-          <violationSeverity>warning</violationSeverity>
-          <failOnViolation>true</failOnViolation>
-        </configuration>
         <executions>
           <execution>
-            <phase>verify</phase>
+            <id>code-style</id>
             <goals>
               <goal>check</goal>
             </goals>
+            <phase>validate</phase>
           </execution>
         </executions>
       </plugin>
